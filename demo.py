@@ -18,7 +18,7 @@ svg_chunks = ["""<?xml version="1.0" encoding="utf-8"?>
 scales = [10, 5, 5, 5, 10, 10]
 for i, params in enumerate(foram_params):
     ix, iy = i % 3, i // 3
-    cx, cy = width / 3 * (ix + 0.5), height / 3 * (iy + 0.5)
+    cx, cy = width / 3 * (ix + 0.5), height / 2 * (iy + 0.5)
     foram = Foram(**params)
     foram.make_foram()
     for chamber in foram.chambers:
