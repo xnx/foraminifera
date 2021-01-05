@@ -63,7 +63,7 @@ class Chamber:
         W = h / d * Vec(y0-y1, x1-x0)
         return P2 + W, P2 - W
 
-    def svg(self, scale, displ):
+    def svg(self, scale, displ, fill_colour='white', edge_colour='black'):
         """Return an SVG representation of the chamber.
 
         scale is a scaling factor and displ is the (x, y) position in image
@@ -73,14 +73,16 @@ class Chamber:
 
         cx, cy = scale * self.centre + displ
         r = scale * self.radius
-        svg = ('<circle cx="{}" cy="{}" r="{}" style="stroke: black;'
-              ' stroke-width: 2px; fill: white;"/>'.format(cx, cy, r))
+        svg = ('<circle cx="{}" cy="{}" r="{}" style="stroke: {}; '
+              'stroke-width: 2px; fill: {};"/>'.format(cx, cy, r, edge_colour,
+                                                       fill_colour))
         return svg
 
 class Foram:
     """A class representing a foraminifera as a sequence of chambers."""
 
-    def __init__(self, nchambers, GF, TF, DeltaPhi):
+    def __init__(self, nchambers, GF, TF, DeltaPhi, fill_colour='white',
+                 edge_colour='black'):
         """Initialize the foraminifera.
 
         The first chamber of the foraminifera is called the proloculus and
@@ -92,6 +94,8 @@ class Foram:
 
         """
         
+        self.fill_colour = fill_colour
+        self.edge_colour = edge_colour
         proloculus = Chamber(1, Vec(0,0), None)
         proloculus.set_aperture_out(Vec(1,0))
         self.chambers = [proloculus]
@@ -172,7 +176,8 @@ class Foram:
 """.format(width, height)]
 
         for chamber in self.chambers:
-            svg_chunks.append(chamber.svg(scale, (width/2, height/2)))
+            svg_chunks.append(chamber.svg(scale, (width/2, height/2),
+                                          self.fill_colour, self.edge_colour))
 
         svg_chunks.append('</svg>')
         self.svg = '\n'.join(svg_chunks)
